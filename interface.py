@@ -1,4 +1,8 @@
 from tkinter import *
+from dotenv import load_dotenv
+from os import environ
+
+load_dotenv()
 
 class Mygui():
     def __init__(self, master):
@@ -17,31 +21,31 @@ class Mygui():
     
     def create_widgets(self):
         #Główny tytuł
-        self.main_label = Label(self.app, text = "Witaj w programie Trójkąt logiczny")
+        self.main_label = Label(self.app, text = environ.get('PROGRAM_TITLE'))
         self.main_label.grid(row = 0, column = 1, sticky = N)
         #Następny tytuł
         
-        self.s_label = Label(self.app, text="Podaj S: ")
+        self.s_label = Label(self.app, text = environ.get('SUBJECT'))
         self.s_label.grid(row = 1, column = 0, sticky = N)
         self.s = Entry(self.app)
         self.s.grid(row = 1, column = 1, sticky = W)
 
-        self.affirmation_label = Label(self.app, text="Podaj twierdzenie: ")
+        self.affirmation_label = Label(self.app, text=environ.get('THEOREM'))
         self.affirmation_label.grid(row = 2, column = 0, sticky = N)
         self.affirmation = Entry(self.app)
         self.affirmation.grid(row=2, column=1, sticky=N)
 
-        self.negation_label = Label(self.app, text="Podaj przeczenie: ")
+        self.negation_label = Label(self.app, text=environ.get('NEGATIVE'))
         self.negation_label.grid(row = 3, column = 0, sticky = N)
         self.negation = Entry(self.app)
         self.negation.grid(row=3, column=1, sticky=N)
 
-        self.p_label = Label(self.app, text="Podaj P: ")
+        self.p_label = Label(self.app, text=environ.get('PREDICAT'))
         self.p_label.grid(row = 4, column = 0, sticky = N)
         self.p = Entry(self.app)
         self.p.grid(row = 4, column = 1, sticky = N)
 
-        self.p_label = Label(self.app, text="Wybierz typ podanego zdania: ")
+        self.p_label = Label(self.app, text=environ.get('CATEGORICAL_SENTENCE'))
         self.p_label.grid(row = 5, column = 0, sticky = N)
         self.typeOfQuestionA = Radiobutton(self.app, text='SaP', variable=self.selectedType, value='a')
         self.typeOfQuestionA.grid(row=6, column=0, sticky=N)
@@ -58,7 +62,7 @@ class Mygui():
         self.typeOfQuestionO = Radiobutton(self.app, text='SoP', variable=self.selectedType, value='o')
         self.typeOfQuestionO.grid(row=9, column=0, sticky=N)
 
-        self.isQuestionTrue = Label(self.app, text="Czy zdanie jest prawdziwe: ")
+        self.isQuestionTrue = Label(self.app, text=environ.get('SENTENCE_STATE'))
         self.isQuestionTrue.grid(row=10, column=0, sticky=N)
 
         self.isQuestionTrue = Radiobutton(self.app, text='True', variable=self.isTrue, value=True)
@@ -69,7 +73,7 @@ class Mygui():
 
 
         #Przycisk do dodania nowych danych
-        self.draw_square = Button(self.app, text="Narysuj kwadrat", command=self.show_data)
+        self.draw_square = Button(self.app, text=environ.get('DRAW_SQUARE'), command=self.show_data)
         self.draw_square.grid(row = 5, column = 3, sticky = E)
 
         self.draw_square_of_opposition()
@@ -117,35 +121,48 @@ class Mygui():
         SaP = None
         SoP = None
 
-        match self.selectedType:
+        
+        match self.selectedType.get():
             case 'a':
-                pass
+                if(self.isTrue):
+                    SaP = True
+                    SoP = False
+                    if(SoP == False):
+                        pass
             case 'i':
-                pass
+                if(self.isTrue):
+                    SiP = True
+                    SeP = False
+                
 
             case 'o':
-                pass
+                if(self.isTrue.get()):
+                    SoP = True
+                    SaP = False
+                    
             case 'e':
-                if(self.isTrue):
+                if(self.isTrue.get()):
+                    SeP = True
                     SiP = False
                     if(SeP == True):
-                        SaP == False
+                        SaP = False
                         if(SaP == False):
-                            SoP == True
+                            SoP = True
                 else:
                     SiP = True
+                    
 
-        self.SaPText = 'Każdy ' + s_value + ' ' + self.getValue(SaP) + ' ' + p_value
-        self.SiPText = 'Niektóre ' + s_value+ ' ' + self.getValue(SiP) + ' ' + p_value
-        self.SePText = 'Żaden ' + s_value + ' ' + self.getValue(SeP) + ' ' + p_value
-        self.SoPText = 'Niektóre ' + s_value + ' ' + self.getValue(SaP) + ' ' + p_value
+        self.SaPText = environ.get('EVERYONE') + s_value + ' ' + self.getValue(SaP) + ' ' + p_value
+        self.SiPText = environ.get('SOME') + s_value+ ' ' + self.getValue(SiP) + ' ' + p_value
+        self.SePText = environ.get('NO_ONE') + s_value + ' ' + self.getValue(SeP) + ' ' + p_value
+        self.SoPText = environ.get('SOME') + s_value + ' ' + self.getValue(SoP) + ' ' + p_value
 
         self.SaP.config(text=self.SaPText)
         self.SiP.config(text=self.SiPText)
         self.SeP.config(text=self.SePText)
         self.SoP.config(text=self.SoPText)
 
-        print(self.SaPText, self.SiPText, self.SePText, self.SoPText)
+        print(self.SaPText,'\n' ,self.SiPText, '\n', self.SePText, '\n' ,self.SoPText)
     
     def getValue(self, value):
         affirmation_value = self.affirmation.get()
