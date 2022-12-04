@@ -8,11 +8,6 @@ gui = Mygui(root)
 root.mainloop()
 
 
-
-
-
-
-
 '''
 #Stworzenie okna
 window = tk.Tk()
