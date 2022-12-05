@@ -186,12 +186,12 @@ class Mygui():
         self.SeP.config(text=self.SePText)
         self.SoP.config(text=self.SoPText)
 
-        print(self.SaPText,'\n' ,self.SiPText, '\n', self.SePText, '\n' ,self.SoPText)
-        print('SiP', SiP, 'SaP', SaP, 'SoP', SoP, 'SeP', SeP)
+        #print(self.SaPText,'\n' ,self.SiPText, '\n', self.SePText, '\n' ,self.SoPText)
+        #print('SiP', SiP, 'SaP', SaP, 'SoP', SoP, 'SeP', SeP)
 
         self.generateState()
 
-        print(self.states)
+        #print(self.states)
 
         self.userChoice()
     
@@ -200,16 +200,16 @@ class Mygui():
         negation_value = self.negation.get()
         undefined_value = '?'
 
-        if(value == True):
+        if(value == True or value == None):
             return affirmation_value
-        elif(value == None):
-            return negation_value
+        #elif(value == None):
+        #    return negation_value
         else:
-            return undefined_value
+            return negation_value
 
 
     def generateState(self): 
-        generatedStates = [self.SaPText + ' ' + self.SiPText, self.SiPText + ' ' + self.SoPText, self.SoPText + ' ' + self.SePText]
+        generatedStates = [self.SaPText + ' & ' + self.SiPText, self.SiPText + ' & ' + self.SoPText, self.SoPText + ' & ' + self.SePText]
         self.states.append(generatedStates)
     
 
@@ -221,7 +221,7 @@ class Mygui():
         self.newWindow = Frame(self.top)
 
         main_label = Label(self.newWindow, text = environ.get('PROGRAM_TITLE'))
-        main_label.grid(row = 0, column = 1, sticky = N)
+        main_label.grid(row = 0, column = 0, sticky = N)
 
         select1 = Radiobutton(self.newWindow, text=self.states[self.currentIteration][0], variable=self.selectedStateNumber, value=0)
         select1.grid(row=1, column=0, sticky=N)
@@ -233,10 +233,10 @@ class Mygui():
         select3.grid(row=3, column=0, sticky=N)
 
         accept = Button(self.newWindow, text=environ.get('ACCEPT'), command=self.addToList)
-        accept.grid(row = 4, column = 0, sticky = E)
+        accept.grid(row = 4, column = 0, sticky = N)
 
         decline = Button(self.newWindow, text=environ.get('DECLINE'), command=self.stop)
-        decline.grid(row = 5, column = 0, sticky = E)
+        decline.grid(row = 4, column = 1, sticky = N)
 
         self.newWindow.pack()
     
@@ -264,9 +264,33 @@ class Mygui():
         self.SePText = ''
 
     def show_state_machine(self):
-        print(self.selectedStates)
 
-        for (data,index) in zip(self.states, self.selectedStates):
-            print(data[index], '\n')
+        self.stateMachine = Toplevel(self.master)
+        self.stateMachine.geometry('500x200')
+        self.stateMachine.title('Choice option')
+
+        self.newWindow2 = Frame(self.stateMachine)
+
+        main_label = Label(self.newWindow2, text = environ.get('STATE_MACHINE'))
+        main_label.grid(row = 0, column = 0, sticky = N)
+
+
+        #print(self.selectedStates)
+
+
+
+        reverseStates = self.states.copy()
+        reverseUserChoice = self.selectedStates.copy()
+
+        #reverseStates.reverse()
+        #reverseUserChoice.reverse()
+        Label(self.newWindow2, text='0').grid(row = 1, column=0, sticky=N)
+        for (data,index,rowIndex) in zip(reverseStates, reverseUserChoice, range(0,len(reverseUserChoice))):
+            Label(self.newWindow2, text=f'{rowIndex+1}. ' + data[index]).grid(row = rowIndex+2, column=0, sticky=N)
+        
+        self.newWindow2.pack()
+
+
+    
 
     
