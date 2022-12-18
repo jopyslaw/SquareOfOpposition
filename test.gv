@@ -1,0 +1,17 @@
+digraph Spanning_tree {
+	0 -> "All asd qwe asd & Some asd qwe asd"
+	0 -> "Some asd qwe asd & Some asd qwse asd"
+	subgraph "cluster_Some asd qwe asd & Some asd qwse asd" {
+		sa -> q2
+		q2 -> aqw
+		aqw -> sd
+		label="decompose 0"
+		color=black
+	}
+	"Some asd qwe asd & Some asd qwse asd" -> sa
+	sd -> "Some asd qwe asd & Some asd qwse asd"
+	0 -> "Some asd qwse asd & Not every asd qwse asd"
+	"Some asd qwe asd & Some asd qwse asd" -> "All qwe asd asd & Some qwe asd asd"
+	"Some asd qwe asd & Some asd qwse asd" -> "Some qwe asd asd & Some qwe sadasd asd"
+	"Some asd qwe asd & Some asd qwse asd" -> "Some qwe sadasd asd & Not every qwe sadasd asd"
+}
