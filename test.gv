@@ -1,17 +1,20 @@
 digraph Spanning_tree {
-	0 -> "All asd qwe asd & Some asd qwe asd"
-	0 -> "Some asd qwe asd & Some asd qwse asd"
-	subgraph "cluster_Some asd qwe asd & Some asd qwse asd" {
-		sa -> q2
-		q2 -> aqw
-		aqw -> sd
-		label="decompose 0"
+	0 -> "All A are B & Some A are B"
+	0 -> "Some A are B & Some A are not B"
+	0 -> "Some A are not B & Not every A are not B"
+	"Some A are B & Some A are not B" -> "All C are D & Some C are D"
+	"Some A are B & Some A are not B" -> "Some C are D & Some C are not D"
+	subgraph "cluster_Some C are D & Some C are not D" {
+		A -> B
+		B -> C
+		C -> D
+		label="decompose 1"
 		color=black
 	}
-	"Some asd qwe asd & Some asd qwse asd" -> sa
-	sd -> "Some asd qwe asd & Some asd qwse asd"
-	0 -> "Some asd qwse asd & Not every asd qwse asd"
-	"Some asd qwe asd & Some asd qwse asd" -> "All qwe asd asd & Some qwe asd asd"
-	"Some asd qwe asd & Some asd qwse asd" -> "Some qwe asd asd & Some qwe sadasd asd"
-	"Some asd qwe asd & Some asd qwse asd" -> "Some qwe sadasd asd & Not every qwe sadasd asd"
+	"Some C are D & Some C are not D" -> A
+	D -> "Some C are D & Some C are not D"
+	"Some A are B & Some A are not B" -> "Some C are not D & Not every C are not D"
+	"Some C are not D & Not every C are not D" -> "All E are F & Some E are F"
+	"Some C are not D & Not every C are not D" -> "Some E are F & Some E are not F"
+	"Some C are not D & Not every C are not D" -> "Some E are not F & Not every E are not F"
 }
