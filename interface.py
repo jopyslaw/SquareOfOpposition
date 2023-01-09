@@ -29,6 +29,8 @@ class Mygui():
 
         self.squares = []
         self.decomposeStates = []
+        self.isTrueDec = BooleanVar(self.app, True)
+        self.selectedTypeDec = StringVar(self.app, 'a')
 
 
         self.create_widgets()
@@ -304,18 +306,16 @@ class Mygui():
                     g.edge(prevSquare.generatedStates[prevSquare.stateToExtend].stateName, state.stateName)
                 
                 if(state.extendState != []):
-                    print(state.extendState)
+                    print('extend state',state.extendState)
                     with g.subgraph(name='cluster_' + str(state.stateName)) as c:
-                        edges = [(state.extendState[0], state.extendState[1]), 
-                            (state.extendState[1], state.extendState[2]),
-                            (state.extendState[2], state.extendState[3]),
+                        edges = [(state.extendState[0].stateName, state.extendState[1].stateName), 
+                            (state.extendState[1].stateName, state.extendState[2].stateName)
                         ]
                         c.edges(edges)
                         c.attr(label='decompose ' + str(index))
                         c.attr(color='black')
-                    print(state.stateName)
-                    g.edge(state.stateName, state.extendState[0])
-                    g.edge(state.extendState[3], state.stateName)
+                    g.edge(state.stateName, state.extendState[0].stateName)
+                    g.edge(state.extendState[2].stateName, state.stateName)
 
         g.render(format='png')
     
@@ -338,11 +338,11 @@ class Mygui():
         for (index,squares) in enumerate(self.squares):
             Label(self.newWindow3, text=index).grid(row = fieldIndex+1, column=0, sticky=N)
             fieldIndex += 1
-            Radiobutton(self.newWindow3, text=self.squares[self.currentIteration-1].generatedStates[0].stateName, variable=self.selectedStateToDecompose, value=int(fieldIndex-1)).grid(row = fieldIndex, column=1, sticky=N)
+            Radiobutton(self.newWindow3, text=squares.generatedStates[0].stateName, variable=self.selectedStateToDecompose, value=int(fieldIndex-1)).grid(row = fieldIndex, column=1, sticky=N)
             fieldIndex += 1
-            Radiobutton(self.newWindow3, text=self.squares[self.currentIteration-1].generatedStates[1].stateName, variable=self.selectedStateToDecompose, value=int(fieldIndex-1)).grid(row = fieldIndex, column=1, sticky=N)
+            Radiobutton(self.newWindow3, text=squares.generatedStates[1].stateName, variable=self.selectedStateToDecompose, value=int(fieldIndex-1)).grid(row = fieldIndex, column=1, sticky=N)
             fieldIndex += 1
-            Radiobutton(self.newWindow3, text=self.squares[self.currentIteration-1].generatedStates[2].stateName, variable=self.selectedStateToDecompose, value=int(fieldIndex-1)).grid(row = fieldIndex, column=1, sticky=N)
+            Radiobutton(self.newWindow3, text=squares.generatedStates[2].stateName, variable=self.selectedStateToDecompose, value=int(fieldIndex-1)).grid(row = fieldIndex, column=1, sticky=N)
         
         self.newWindow3.pack()
     
@@ -362,6 +362,58 @@ class Mygui():
         self.decpomoseBtn = Button(self.newWindow4, text=environ.get('DECOMPOSE_STATE'), command=self.addDecomposeState)
         self.decpomoseBtn.grid(row = 0, column = 1, sticky = N)
 
+
+        self.s_label_dec = Label(self.newWindow4, text = environ.get('SUBJECT'))
+        self.s_label_dec.grid(row = 1, column = 0, sticky = N)
+        self.s_dec = Entry(self.newWindow4)
+        self.s_dec.grid(row = 1, column = 1, sticky = W)
+
+        self.affirmation_label_dec = Label(self.newWindow4, text=environ.get('THEOREM'))
+        self.affirmation_label_dec.grid(row = 2, column = 0, sticky = N)
+        self.affirmation_dec = Entry(self.newWindow4)
+        self.affirmation_dec.grid(row=2, column=1, sticky=N)
+
+        self.negation_label_dec = Label(self.newWindow4, text=environ.get('NEGATIVE'))
+        self.negation_label_dec.grid(row = 3, column = 0, sticky = N)
+        self.negation_dec = Entry(self.newWindow4)
+        self.negation_dec.grid(row=3, column=1, sticky=N)
+
+        self.p_label_dec = Label(self.newWindow4, text=environ.get('PREDICAT'))
+        self.p_label_dec.grid(row = 4, column = 0, sticky = N)
+        self.p_dec = Entry(self.newWindow4)
+        self.p_dec.grid(row = 4, column = 1, sticky = N)
+
+        self.p_label_dec = Label(self.newWindow4, text=environ.get('CATEGORICAL_SENTENCE'))
+        self.p_label_dec.grid(row = 5, column = 0, sticky = N)
+        self.typeOfQuestionA_dec = Radiobutton(self.newWindow4, text='SaP', variable=self.selectedTypeDec, value='a')
+        self.typeOfQuestionA_dec.grid(row=6, column=0, sticky=N)
+
+        
+        self.typeOfQuestionE_dec = Radiobutton(self.newWindow4, text='SeP', variable=self.selectedTypeDec, value='e')
+        self.typeOfQuestionE_dec.grid(row=7, column=0, sticky=N)
+
+    
+        self.typeOfQuestionI_dec = Radiobutton(self.newWindow4, text='SiP', variable=self.selectedTypeDec, value='i')
+        self.typeOfQuestionI_dec.grid(row=8, column=0, sticky=N)
+
+       
+        self.typeOfQuestionO_dec = Radiobutton(self.newWindow4, text='SoP', variable=self.selectedTypeDec, value='o')
+        self.typeOfQuestionO_dec.grid(row=9, column=0, sticky=N)
+
+        self.isQuestionTrue_dec = Label(self.newWindow4, text=environ.get('SENTENCE_STATE'))
+        self.isQuestionTrue_dec.grid(row=10, column=0, sticky=N)
+
+        self.isQuestionTrue_dec = Radiobutton(self.newWindow4, text='True', variable=self.isTrueDec, value=True)
+        self.isQuestionTrue_dec.grid(row=11, column=0, sticky=N)
+
+        self.isQuestionFalse_dec = Radiobutton(self.newWindow4, text='False', variable=self.isTrueDec, value=False)
+        self.isQuestionFalse_dec.grid(row=11, column=1, sticky=N)
+
+
+
+        '''
+        
+
         self.decLab1 = Label(self.newWindow4, text = environ.get('FIRST_STATE'))
         self.decLab1.grid(row = 1, column = 0, sticky = N)
         self.decLab1E = Entry(self.newWindow4)
@@ -380,7 +432,7 @@ class Mygui():
         self.decLab4 = Label(self.newWindow4, text=environ.get('FOURTH_STATE'))
         self.decLab4.grid(row = 4, column = 0, sticky = N)
         self.decLab4E = Entry(self.newWindow4)
-        self.decLab4E.grid(row = 4, column = 1, sticky = N)
+        self.decLab4E.grid(row = 4, column = 1, sticky = N)'''
 
         self.newWindow4.pack()
 
@@ -393,7 +445,65 @@ class Mygui():
         elif((self.selectedStateToDecompose.get() + 1) % 3 == 0):
             squareIndex = int((self.selectedStateToDecompose.get() + 1) / 3) 
         
-        states = [self.decLab1E.get(), self.decLab2E.get(), self.decLab3E.get(), self.decLab4E.get()]
+        s_value = self.s_dec.get()
+        p_value = self.p_dec.get()
+        SiP = None
+        SeP = None
+        SaP = None
+        SoP = None
+
+        match self.selectedTypeDec.get():
+            case 'a':
+                if(self.isTrueDec.get()):
+                    SaP = True
+                    SoP = False
+                    SiP = True
+                    SeP = False
+                else:
+                    SaP = False
+                    SoP = True
+                    SiP = None #nieokreślony
+                    SeP = None #nieokreślony
+            case 'i':
+                if(self.isTrueDec.get()):
+                    SiP = True
+                    SeP = False
+                    SaP = None
+                    SoP = None
+                else: 
+                    SiP = False
+                    SeP = True
+                    SaP = False
+                    SoP = True
+            case 'o':
+                if(self.isTrueDec.get()):
+                    SoP = True
+                    SaP = False
+                    SeP = None
+                    SiP = None
+                else: 
+                    SoP = False
+                    SaP = True
+                    SeP = False
+                    SiP = True
+            case 'e':
+                if(self.isTrueDec.get()):
+                    SeP = True
+                    SiP = False
+                    SaP = False
+                    SoP = True
+                else:
+                    SeP = False
+                    SiP = True
+                    SaP = None
+                    SoP = None
+
+        SaPText = environ.get('EVERYONE') + s_value + ' ' + self.getValue(SaP) + ' ' + p_value
+        SiPText = environ.get('SOME') + s_value+ ' ' + self.getValue(SiP) + ' ' + p_value
+        SePText = environ.get('NO_ONE') + s_value + ' ' + self.getValue(SeP) + ' ' + p_value
+        SoPText = environ.get('SOME') + s_value + ' ' + self.getValue(SoP) + ' ' + p_value
+
+        square = LogicalSquare(SaPText, SePText, SiPText, SoPText)
 
         print(self.selectedStateToDecompose.get())
 
@@ -403,7 +513,7 @@ class Mygui():
 
         print(selectedIndex)
 
-        self.squares[squareIndex].generatedStates[selectedIndex].addExtendState(states)
+        self.squares[squareIndex].generatedStates[selectedIndex].addExtendState(square.generatedStates)
 
         print(self.squares)
 
