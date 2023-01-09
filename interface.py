@@ -509,7 +509,7 @@ class Mygui():
 
         print(squareIndex)
 
-        selectedIndex = (self.selectedStateToDecompose.get() - (squareIndex * 3)) 
+        selectedIndex = abs((self.selectedStateToDecompose.get() - (squareIndex * 3))) 
 
         print(selectedIndex)
 
